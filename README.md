@@ -14,6 +14,9 @@ The codes that have been added are:
 2. The file "insurrance-project.ipynb" is for Exploratory Data Analysis (EDA) of insurance company expenses on their clients based on their behavior and health challenges.
 3. The file "titanic-logical-regression.ipynb" is for Exploratory Data Analysis (EDA) to relate the survival of the passenger in titanic to different conditions like age, class they belong, amount paid and number of dependents
 4. The file "Database-creation-and-analysis-using-MySQL.ipynb" is making use of SQL through MySQL to create database, retreive record, update record, and formatting list records
+5. The "Machine-Learning-on-google-cloud-dataset-using-BigQuery.ipynb" makes use of Biquery and SQL to access dataset in google cloud and build machine learning for the train set
+6. The file "Comprehensive-analysis-google-cloud-dataset-using-SQL-and-BigQuery" makes use of the Bigqueryhelper and SQL to access data from the database and process it. It also include comprehensive analysis and mining of the records from the database
+
 
 
 Some of the library used include pandas, pandas_profiling, numpy, sklearn, seaborn, matplotlib, dtreeviz.
