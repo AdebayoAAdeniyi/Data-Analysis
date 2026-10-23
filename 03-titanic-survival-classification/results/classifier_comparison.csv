@@ -1,0 +1,11 @@
+classifier,accuracy_mean,accuracy_std,roc_auc_mean
+SVC (RBF),0.8339,0.0372,0.8485
+Linear discriminant,0.8339,0.0436,0.8709
+Logistic regression,0.8316,0.0391,0.8712
+Random forest,0.8305,0.0414,0.8751
+Gradient boosting,0.8294,0.0319,0.8678
+AdaBoost,0.8249,0.0468,0.8636
+Quadratic discriminant,0.8215,0.042,0.8667
+KNeighbors (k=3),0.8024,0.0463,0.8293
+Decision tree,0.7867,0.0377,0.7745
+Gaussian naive Bayes,0.7743,0.048,0.8455

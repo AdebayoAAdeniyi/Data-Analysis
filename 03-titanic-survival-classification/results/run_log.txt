@@ -1,0 +1,130 @@
+Training rows: 891   survival rate: 0.384
+
+Missing values:
+          missing  percent
+Cabin         687    77.10
+Age           177    19.87
+Embarked        2     0.22
+
+Age mean 29.70, median 28.00 (right skew, so the median is the safer fill value)
+
+Median age used for imputation, by title:
+Title
+Master     3.5
+Miss      21.0
+Mr        30.0
+Mrs       35.0
+Rare      48.5
+
+Survival rate by group (training data):
+
+        survival_rate  passengers
+Sex                              
+female          0.742         314
+male            0.189         577
+
+        survival_rate  passengers
+Pclass                           
+1               0.630         216
+2               0.473         184
+3               0.242         491
+
+          survival_rate  passengers
+Embarked                           
+C                 0.554         168
+Q                 0.390          77
+S                 0.337         644
+
+        survival_rate  passengers
+Title                            
+Master          0.575          40
+Miss            0.703         185
+Mr              0.157         517
+Mrs             0.794         126
+Rare            0.348          23
+
+             survival_rate  passengers
+TravelAlone                           
+0                    0.506         354
+1                    0.304         537
+
+            survival_rate  passengers
+FamilySize                           
+1                   0.304         537
+2                   0.553         161
+3                   0.578         102
+4                   0.724          29
+5                   0.200          15
+6                   0.136          22
+7                   0.333          12
+8                   0.000           6
+11                  0.000           7
+
+                 survival_rate  passengers
+FareQuartile                              
+(-0.001, 7.91]           0.197         223
+(7.91, 14.454]           0.304         224
+(14.454, 31.0]           0.455         222
+(31.0, 512.329]          0.581         222
+
+          survival_rate  passengers
+AgeBand                            
+(0, 16]           0.548         104
+(16, 32]          0.327         501
+(32, 48]          0.439         205
+(48, 64]          0.429          70
+(64, 81]          0.091          11
+
+          survival_rate  passengers
+HasCabin                           
+0                 0.300         687
+1                 0.667         204
+
+Classifier comparison, stratified 10 fold CV on the training data:
+            classifier  accuracy_mean  accuracy_std  roc_auc_mean
+             SVC (RBF)          0.834         0.037         0.848
+   Linear discriminant          0.834         0.044         0.871
+   Logistic regression          0.832         0.039         0.871
+         Random forest          0.830         0.041         0.875
+     Gradient boosting          0.829         0.032         0.868
+              AdaBoost          0.825         0.047         0.864
+Quadratic discriminant          0.822         0.042         0.867
+      KNeighbors (k=3)          0.802         0.046         0.829
+         Decision tree          0.787         0.038         0.774
+  Gaussian naive Bayes          0.774         0.048         0.845
+
+RFECV optimal number of features: 12
+Selected features: ['Age', 'LogFare', 'FamilySize', 'HasCabin', 'Sex_male', 'Pclass_1', 'Pclass_2', 'Embarked_C', 'Embarked_Q', 'Title_Master', 'Title_Miss', 'Title_Mrs']
+
+Best C = 0.1778
+CV accuracy 0.834 ± 0.028, CV ROC AUC 0.881 ± 0.045, CV log loss 0.410
+
+Hold out test set (20%, stratified):
+  accuracy 0.827   log loss 0.441   ROC AUC 0.847
+              precision    recall  f1-score   support
+
+        Died      0.856     0.864     0.860       110
+    Survived      0.779     0.768     0.774        69
+
+    accuracy                          0.827       179
+   macro avg      0.818     0.816     0.817       179
+weighted avg      0.826     0.827     0.827       179
+
+A threshold of 0.069 gives sensitivity 0.957 and specificity 0.164 (false positive rate 83.6%).
+
+Logistic regression coefficients (standardised inputs):
+     feature  coefficient  odds_ratio_per_1sd  odds_ratio_per_unit
+    Sex_male       -0.860               0.423                0.165
+  FamilySize       -0.662               0.516                0.664
+         Age       -0.356               0.700                0.974
+  Embarked_Q        0.074               1.077                1.305
+  Embarked_C        0.136               1.146                1.406
+     LogFare        0.336               1.400                1.401
+  Title_Miss        0.388               1.473                2.581
+    Pclass_2        0.396               1.486                2.665
+    HasCabin        0.414               1.513                2.647
+    Pclass_1        0.466               1.594                2.934
+   Title_Mrs        0.563               1.756                5.200
+Title_Master        0.574               1.775               15.307
+
+Wrote 418 predictions to results/submission.csv

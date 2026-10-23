@@ -1,0 +1,9 @@
+feature,importance_mean,importance_std
+obese_smoker,0.5304,0.0349
+is_smoker,0.3694,0.0221
+age,0.1719,0.0094
+bmi,0.0045,0.0014
+children,0.0044,0.002
+region,0.0029,0.0012
+obese,0.0019,0.0009
+is_male,0.0008,0.0005

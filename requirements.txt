@@ -1,0 +1,16 @@
+# Core (projects 01, 02, 03, 07); tested with Python 3.13 and the versions in brackets
+pandas>=2.0          # [3.0.5]
+numpy>=1.24          # [2.5.3]
+scipy>=1.10          # [1.18.1]
+scikit-learn>=1.3    # [1.9.1]
+matplotlib>=3.7      # [3.11.2]
+seaborn>=0.13        # [0.13.2]
+
+# Project specific
+wordcloud>=1.9       # 03 fake news            [1.9.6]
+lightgbm>=4.0        # 07 AmEx                 [4.7.0]
+pyarrow>=14          # 07 AmEx parquet files   [26.0.0]
+mysql-connector-python>=8.0   # 04 MySQL       [26.10.0]
+plotly>=5.0          # 05 choropleth map       [7.1.0]
+google-cloud-bigquery>=3.0    # 05 and 06 BigQuery
+db-dtypes>=1.0                # 05 and 06 BigQuery to pandas

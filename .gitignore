@@ -1,0 +1,16 @@
+# Data files are downloaded separately (see each project README)
+data/
+*.csv.gz
+*.parquet
+*.sqlite
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Credentials
+*.json
+.env

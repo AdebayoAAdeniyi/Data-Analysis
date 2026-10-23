@@ -1,0 +1,174 @@
+[1] Connecting to the server and creating the database
+Connected to MySQL server 5.5.5-10.11.14-MariaDB-0ubuntu0.24.04.1 on localhost
+  OK (5 row(s) affected): DROP DATABASE IF EXISTS `school_demo`
+  OK (1 row(s) affected): CREATE DATABASE IF NOT EXISTS `school_demo` CHARACTER SET utf8mb4 COLL
+Connected to MySQL server 5.5.5-10.11.14-MariaDB-0ubuntu0.24.04.1 on localhost, database 'school_demo'
+
+[2] Creating tables
+  OK (0 row(s) affected): CREATE TABLE IF NOT EXISTS teacher ( teacher_id INT PRIMARY KEY, first
+  OK (0 row(s) affected): CREATE TABLE IF NOT EXISTS client ( client_id INT PRIMARY KEY, client_
+  OK (0 row(s) affected): CREATE TABLE IF NOT EXISTS participant ( participant_id INT PRIMARY KE
+  OK (0 row(s) affected): CREATE TABLE IF NOT EXISTS course ( course_id INT PRIMARY KEY, course_
+  OK (0 row(s) affected): CREATE TABLE IF NOT EXISTS takes_course ( participant_id INT, course_i
+
+[3] Populating tables (parameterised executemany)
+  OK (6 row(s) inserted): INSERT IGNORE INTO teacher VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+  OK (5 row(s) inserted): INSERT IGNORE INTO client VALUES (%s, %s, %s, %s)
+  OK (14 row(s) inserted): INSERT IGNORE INTO participant VALUES (%s, %s, %s, %s, %s)
+  OK (9 row(s) inserted): INSERT IGNORE INTO course VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+  OK (17 row(s) inserted): INSERT IGNORE INTO takes_course VALUES (%s, %s)
+
+--- Tables in the database ---
+Tables_in_school_demo
+               client
+               course
+          participant
+         takes_course
+              teacher
+
+[4] Reading data into pandas
+
+--- All teachers ---
+ teacher_id first_name    last_name language_1 language_2        dob  tax_id      phone_no
+          1      James        Smith        ENG        NaN 1985-04-20   12345 +491774553676
+          2   Stefanie       Martin        FRA        NaN 1970-02-17   23456 +491234567890
+          3      Steve         Wang        MAN        ENG 1990-11-12   34567 +447840921333
+          4 Friederike Müller-Rossi        DEU        ITA 1987-07-07   45678 +492345678901
+          5     Isobel      Ivanova        RUS        ENG 1963-05-30   56789 +491772635467
+          6      Niamh       Murphy        ENG        IRI 1995-09-08   67890 +491231231232
+
+[5] JOINs
+
+--- Courses taught off site, with the client's address ---
+ course_id                course_name language             client_name                           address
+        13           Beginner English      ENG Big Business Federation 123 Falschungstraße, 10999 Berlin
+        14       Intermediate English      ENG Big Business Federation 123 Falschungstraße, 10999 Berlin
+        15           Advanced English      ENG Big Business Federation 123 Falschungstraße, 10999 Berlin
+        17     Français intermédiaire      FRA Big Business Federation 123 Falschungstraße, 10999 Berlin
+        19       Intermediate English      ENG              Banko Bank     12 Betrugstraße, 12345 Berlin
+        20 Fortgeschrittenes Russisch      RUS            AutoMaker AG  20 Künstlichstraße, 10023 Berlin
+
+--- Participants with the courses they take and the teacher (4 table join) ---
+first_name  last_name             client_name                course_name                 teacher
+    Marina       Berg Big Business Federation     Français intermédiaire         Stefanie Martin
+    Marina       Berg Big Business Federation           Advanced English            Niamh Murphy
+    Andrea      Duerr Big Business Federation     Français intermédiaire         Stefanie Martin
+   Philipp     Probst          eCommerce GmbH       Deutsch für Anfänger Friederike Müller-Rossi
+      René     Brandt          eCommerce GmbH       Deutsch für Anfänger Friederike Müller-Rossi
+   Susanne    Shuster          eCommerce GmbH       Deutsch für Anfänger Friederike Müller-Rossi
+ Christian  Schreiner Big Business Federation           Beginner English            Niamh Murphy
+     Harry        Kim Big Business Federation           Beginner English            Niamh Murphy
+       Jan      Nowak Big Business Federation           Beginner English            Niamh Murphy
+     Pablo     Garcia Big Business Federation       Intermediate English            Niamh Murphy
+     Pablo     Garcia Big Business Federation           Advanced English            Niamh Murphy
+   Melanie  Dreschler            AutoMaker AG Mandarin für Autoindustrie              Steve Wang
+   Melanie  Dreschler            AutoMaker AG Fortgeschrittenes Russisch          Isobel Ivanova
+    Dieter       Durr            AutoMaker AG Mandarin für Autoindustrie              Steve Wang
+       Max Mustermann              Banko Bank       Intermediate English             James Smith
+    Maxine Mustermann              Banko Bank       Intermediate English             James Smith
+     Heiko  Fleischer           WeMoveIt GmbH      English for Logistics             James Smith
+  OK (1 row(s) affected): INSERT IGNORE INTO client VALUES (106, 'Startup Labs', '5 Probeweg, 10
+
+--- INNER JOIN client -> course (9 rows) ---
+ client_id             client_name                course_name
+       101 Big Business Federation           Beginner English
+       101 Big Business Federation       Intermediate English
+       101 Big Business Federation           Advanced English
+       101 Big Business Federation     Français intermédiaire
+       102          eCommerce GmbH       Deutsch für Anfänger
+       103            AutoMaker AG Mandarin für Autoindustrie
+       103            AutoMaker AG Fortgeschrittenes Russisch
+       104              Banko Bank       Intermediate English
+       105           WeMoveIt GmbH      English for Logistics
+
+--- LEFT JOIN client -> course (10 rows) ---
+ client_id             client_name                course_name
+       101 Big Business Federation           Beginner English
+       101 Big Business Federation       Intermediate English
+       101 Big Business Federation           Advanced English
+       101 Big Business Federation     Français intermédiaire
+       102          eCommerce GmbH       Deutsch für Anfänger
+       103            AutoMaker AG Mandarin für Autoindustrie
+       103            AutoMaker AG Fortgeschrittenes Russisch
+       104              Banko Bank       Intermediate English
+       105           WeMoveIt GmbH      English for Logistics
+       106            Startup Labs                        NaN
+
+--- RIGHT JOIN client -> course (9 rows) ---
+ client_id             client_name                course_name
+       101 Big Business Federation           Beginner English
+       101 Big Business Federation       Intermediate English
+       101 Big Business Federation           Advanced English
+       101 Big Business Federation     Français intermédiaire
+       102          eCommerce GmbH       Deutsch für Anfänger
+       103            AutoMaker AG Mandarin für Autoindustrie
+       103            AutoMaker AG Fortgeschrittenes Russisch
+       104              Banko Bank       Intermediate English
+       105           WeMoveIt GmbH      English for Logistics
+
+LEFT JOIN keeps 'Startup Labs' with a NULL course; INNER JOIN drops it.
+
+[6] Aggregation: simple business questions
+
+--- How many participants does each course have? ---
+ course_id                course_name level  participants
+        13           Beginner English    A2             3
+        18       Deutsch für Anfänger    A2             3
+        15           Advanced English    C1             2
+        16 Mandarin für Autoindustrie    B1             2
+        17     Français intermédiaire    B1             2
+        19       Intermediate English    B2             2
+        12      English for Logistics    A1             1
+        14       Intermediate English    B2             1
+        20 Fortgeschrittenes Russisch    C1             1
+
+--- Teacher workload: number of courses and total teaching weeks ---
+                teacher  courses total_weeks
+           Niamh Murphy        3         120
+            James Smith        2          20
+        Stefanie Martin        1          18
+             Steve Wang        1          15
+Friederike Müller-Rossi        1           8
+         Isobel Ivanova        1           4
+
+--- Clients buying more than one course (GROUP BY ... HAVING) ---
+            client_name industry  courses_bought languages
+Big Business Federation      NGO               4   ENG,FRA
+           AutoMaker AG     Auto               2   MAN,RUS
+
+--- Teachers older than the average teacher (subquery) ---
+first_name last_name        dob  age_on_2020_01_01
+    Isobel   Ivanova 1963-05-30                 56
+  Stefanie    Martin 1970-02-17                 49
+
+[7] Parameterised UPDATE (values are passed separately from the SQL text,
+    so user input can never change the statement: no SQL injection)
+  OK (1 row(s) affected): UPDATE client SET address = %s WHERE client_id = %s
+
+--- Client 101 after the update ---
+ client_id             client_name                      address industry
+       101 Big Business Federation 23 Fingiertweg, 14534 Berlin      NGO
+
+Adding two teachers with executemany
+  OK (2 row(s) inserted): INSERT IGNORE INTO teacher (teacher_id, first_name, last_name, languag
+
+[8] DELETE and referential actions
+  OK (1 row(s) affected): DELETE FROM course WHERE course_id = %s
+  Enrolments in course 20: 1 before, 0 after (removed automatically by ON DELETE CASCADE)
+  OK (1 row(s) affected): DELETE FROM teacher WHERE teacher_id = %s
+
+--- Teacher 1 (James Smith) deleted: his courses survive with teacher = NULL (ON DELETE SET NULL) ---
+ course_id           course_name teacher
+        12 English for Logistics    None
+        19  Intermediate English    None
+  OK (0 row(s) affected): DELETE FROM course WHERE course_id = %s
+  Deleting a course id that does not exist affects 0 rows; always check rowcount.
+
+[9] DROP TABLE on a referenced table
+  Refused as expected: Cannot delete or update a parent row: a foreign key constraint fails
+  The course table still references teacher. Drop child tables first,
+  or remove the foreign key, instead of disabling FOREIGN_KEY_CHECKS.
+
+[10] Transaction with rollback
+  Second insert failed (Duplicate entry '101' for key 'PRIMARY'); the whole transaction was rolled back.
+  Client 107 present after rollback: False

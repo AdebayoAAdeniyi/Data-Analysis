@@ -1,0 +1,7 @@
+model,train_R2,test_R2,test_RMSE,test_MAE,cv5_R2_mean,cv5_R2_std
+Linear regression,0.7341,0.7959,5668.84,4012.7153,0.7401,0.052
+PCA + linear regression,0.7341,0.7959,5668.84,4012.7153,0.7401,0.052
+Polynomial (degree 2) regression,0.8325,0.8842,4270.0165,2884.2449,0.8359,0.0399
+Linear + obesity x smoker interaction,0.8505,0.8994,3978.8304,2344.4294,0.8582,0.0334
+Random forest,0.8989,0.8992,3983.7791,2420.987,0.8522,0.0421
+Gradient boosting,0.8963,0.8967,4033.6975,2462.5685,0.8543,0.0381

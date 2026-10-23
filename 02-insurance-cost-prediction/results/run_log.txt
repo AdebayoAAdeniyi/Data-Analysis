@@ -1,0 +1,64 @@
+======================================================================
+Rows: 1338   Columns: 7
+
+Missing values per column:
+age         0
+sex         0
+bmi         0
+children    0
+smoker      0
+region      0
+charges     0
+
+Summary statistics:
+           count      mean       std      min      25%      50%       75%       max
+age       1338.0     39.21     14.05    18.00    27.00    39.00     51.00     64.00
+bmi       1338.0     30.66      6.10    15.96    26.30    30.40     34.69     53.13
+children  1338.0      1.09      1.21     0.00     0.00     1.00      2.00      5.00
+charges   1338.0  13270.42  12110.01  1121.87  4740.29  9382.03  16639.91  63770.43
+
+Pearson correlation of each feature with charges:
+is_male      0.057
+children     0.068
+bmi          0.198
+age          0.299
+is_smoker    0.787
+
+Hypothesis test: smokers have higher charges than non smokers
+  n_smokers            274
+  n_non_smokers        1064
+  median_smokers       3.446e+04
+  median_non_smokers   7,345
+  median_ratio         4.691
+  mann_whitney_U       2.841e+05
+  p_value              2.635e-130
+
+Median charges by smoking status and obesity:
+obese   BMI < 30  BMI >= 30
+smoker                     
+no        6762.0     8076.0
+yes      20167.0    40904.0
+
+Model comparison (same 75/25 split, random_state=0, plus 5 fold CV):
+                                       train_R2  test_R2  test_RMSE  test_MAE  cv5_R2_mean  cv5_R2_std
+model                                                                                                 
+Linear regression                         0.734    0.796   5668.840  4012.715        0.740       0.052
+PCA + linear regression                   0.734    0.796   5668.840  4012.715        0.740       0.052
+Polynomial (degree 2) regression          0.833    0.884   4270.017  2884.245        0.836       0.040
+Linear + obesity x smoker interaction     0.850    0.899   3978.830  2344.429        0.858       0.033
+Random forest                             0.899    0.899   3983.779  2420.987        0.852       0.042
+Gradient boosting                         0.896    0.897   4033.697  2462.569        0.854       0.038
+
+Permutation importance on the test set (Linear + obesity x smoker interaction):
+     feature  importance_mean  importance_std
+obese_smoker           0.5304          0.0349
+   is_smoker           0.3694          0.0221
+         age           0.1719          0.0094
+         bmi           0.0045          0.0014
+    children           0.0044          0.0020
+      region           0.0029          0.0012
+       obese           0.0019          0.0009
+     is_male           0.0008          0.0005
+
+Best model by 5 fold CV R²: Linear + obesity x smoker interaction
+Figures saved to figures/, metrics saved to results/
