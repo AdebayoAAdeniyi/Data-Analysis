@@ -108,13 +108,17 @@ The original notebook, `american-express-default-prediction-competition.ipynb`, 
 
 ### Competition result
 
-I entered as a solo competitor and finished **4,137th of 4,874 teams** on the final leaderboard (Kaggle profile `aadeniyi`). This was my first Kaggle competition. The review above suggests several reasons for the modest result:
+I entered as a solo competitor and finished 4,137th of 4,874 teams on the final leaderboard (Kaggle profile `aadeniyi`). This was my first Kaggle competition. My final selected submission was a LightGBM model built after feature engineering and feature selection, with a private score of 0.76906 and a public score of 0.76285. I processed the full training data remotely on the CHPC national cluster in South Africa, because it was too large for a Jupyter notebook.
 
-* the models were trained on about 20,000 statement rows (1,664 customers), a very small part of the full training data
-* some submissions contained 0/1 labels, but the metric rewards a good **ranking** of probabilities
-* the probability submissions were misaligned with customer IDs by the `np.ravel(predict_proba(...))` bug
+The scripts from that run were not kept. The notebook I kept, which this review is based on, trained on a sample of about 20,000 statement rows (1,664 customers), so it does not reproduce the submitted result.
 
-The rebuilt pipeline fixes all three: it can use the full data (or a customer level subset), it submits probabilities, and it takes `predict_proba(X)[:, 1]` explicitly. It has not been scored on the leaderboard, because the competition has closed. If Kaggle still accepts late submissions for this competition, a late submission would give a private leaderboard score to compare against.
+What the review found and what I can show:
+
+* **0/1 labels hurt the score.** The competition metric rewards a good ranking of probabilities. My three submissions that were thresholded to 0 or 1 scored about 0.51 (private), against about 0.77 for the two probability submissions I selected. The Kaggle submissions page shows both sets of scores.
+* **A flattening bug in the notebook.** The notebook I kept flattens the model output with `np.ravel(predict_proba(...))`, which would misalign probabilities with customer IDs. My selected submissions score about 0.77, far above what misaligned predictions would give, so they were not affected. I can no longer tell which earlier submissions, if any, used the buggy code.
+* **Modest ranking.** I did not have the time or the experience to tune the model, calibrate it carefully or build an ensemble. This is a judgment about the result, not something I measured.
+
+The rebuilt pipeline in this folder uses the full data or a customer level subset, submits probabilities, and takes `predict_proba(X)[:, 1]` explicitly. It has been tested only on synthetic data with the real schema, and it has not been scored on the leaderboard. The Kaggle page still shows a Late Submission button, so a late submission appears to be possible and would give a private score to compare with 0.76906.
 
 ### Ideas for the next iteration
 * Train on the full data (all customers) with the Parquet files, where boosted trees typically gain the most.
